@@ -9,31 +9,39 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
+    if (d != 1) return false; 
+
     int len1 = str1.size();
     int len2 = str2.size();
 
-    std::vector<std::vector<int>> dp(len1 + 1, std::vector<int>(len2 + 1));
+    if (abs(len1 - len2) > 1) return false; 
 
-    for (int i = 0; i <= len1; ++i) {
-        for (int j = 0; j <= len2; ++j) {
-            if (i == 0) {
-                dp[i][j] = j;  
-            } else if (j == 0) {
-                dp[i][j] = i;  
+    int diff_count = 0;
+    int i = 0, j = 0;
+
+    while (i < len1 && j < len2) {
+        if (str1[i] != str2[j]) {
+            diff_count++;
+            if (diff_count > 1) return false;
+
+            if (len1 > len2) {
+                i++;  
+            } else if (len1 < len2) {
+                j++;  
             } else {
-                dp[i][j] = std::min({dp[i - 1][j] + 1,  
-                                     dp[i][j - 1] + 1,       
-                                     dp[i - 1][j - 1] + (str1[i - 1] != str2[j - 1])}); 
+                i++, j++; 
             }
+        } else {
+            i++, j++;  
         }
     }
 
-    int distance = dp[len1][len2];
+    if (i < len1 || j < len2) diff_count++;
 
-    return distance == d;
+    return diff_count == 1;
 }
 
-bool is_adjacent(const string& word1, const string& word2){
+bool is_adjacent(const std::string& word1, const std::string& word2) {
     return edit_distance_within(word1, word2, 1);
 }
 
@@ -47,13 +55,6 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         vector<string> path = q.front();
         q.pop();
         string current_word = path.back();
-        
-        // Debugging: print the current path
-        // cout << "Current path: ";
-        // for (const string& word : path) {
-        //     cout << word << " ";
-        // }
-        // cout << endl;
 
         if(current_word == end_word){
             return path;
@@ -65,7 +66,6 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
                 vector<string> new_path = path;
                 new_path.push_back(word);
                 q.push(new_path);
-                // cout << "Enqueuing: " << word << endl;
             }
         }
     }
