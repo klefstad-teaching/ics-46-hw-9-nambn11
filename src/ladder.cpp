@@ -12,28 +12,24 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int len1 = str1.size();
     int len2 = str2.size();
 
-    // Create a 2D DP table to calculate Levenshtein distance
     std::vector<std::vector<int>> dp(len1 + 1, std::vector<int>(len2 + 1));
 
-    // Initialize the base case
     for (int i = 0; i <= len1; ++i) {
         for (int j = 0; j <= len2; ++j) {
             if (i == 0) {
-                dp[i][j] = j;  // Insertions
+                dp[i][j] = j;  
             } else if (j == 0) {
-                dp[i][j] = i;  // Deletions
+                dp[i][j] = i;  
             } else {
-                dp[i][j] = std::min({dp[i - 1][j] + 1,       // Deletion
-                                     dp[i][j - 1] + 1,       // Insertion
-                                     dp[i - 1][j - 1] + (str1[i - 1] != str2[j - 1])}); // Substitution
+                dp[i][j] = std::min({dp[i - 1][j] + 1,  
+                                     dp[i][j - 1] + 1,       
+                                     dp[i - 1][j - 1] + (str1[i - 1] != str2[j - 1])}); 
             }
         }
     }
 
-    // Calculate the edit distance
     int distance = dp[len1][len2];
 
-    // Return true if the distance is exactly d
     return distance == d;
 }
 
