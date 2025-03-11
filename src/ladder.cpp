@@ -13,12 +13,12 @@ bool edit_distance_within(const string& str1, const string& str2, int d){
     }
 
     int diff_count = 0;
-    for (size_t i = 0; i < str1.length(); ++1){
+    for (size_t i = 0; i < str1.length(); ++i){
         if (str1[i] != str2[i]){
             diff_count++;
         }
         if (diff_count > d){
-            return false
+            return false;
         }
     }
     return diff_count == d;
