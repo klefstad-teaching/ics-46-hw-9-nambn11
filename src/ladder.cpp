@@ -58,7 +58,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     set<string> visited;
     q.push({begin_word});
     visited.insert(begin_word);
-    cout << "bruh"<<endl;
+    
     while(!q.empty()){
         vector<string> path = q.front();
         q.pop();
