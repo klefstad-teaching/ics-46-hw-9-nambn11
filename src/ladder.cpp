@@ -10,8 +10,8 @@ void error(string word1, string word2, string msg) {
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
     if (str1 == str2) return d == 1; 
 
-    int len1 = str1.size();
-    int len2 = str2.size();
+    int len1 = str1.length();
+    int len2 = str2.length();
 
     if (abs(len1 - len2) > 1){ 
         return false; 
@@ -24,8 +24,9 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     while (i < len1 && j < len2) {
         if (str1[i] != str2[j]) {
             diff_count++;
-            if (diff_count > 1) return false;
-
+            if (diff_count > 1){    
+                return false;   
+            }
             if (len1 > len2) {
                 i++;  
             } else if (len1 < len2) {
@@ -57,7 +58,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
     set<string> visited;
     q.push({begin_word});
     visited.insert(begin_word);
-
+    cout << "bruh"<<endl;
     while(!q.empty()){
         vector<string> path = q.front();
         q.pop();
