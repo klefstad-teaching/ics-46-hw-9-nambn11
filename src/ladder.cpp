@@ -1,6 +1,5 @@
 #include "ladder.h"
 #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
-
 using namespace std;
 
 void error(string word1, string word2, string msg) {
@@ -39,7 +38,9 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
         }
     }
 
-    if (i < len1 || j < len2) diff_count++;
+    if (i < len1 || j < len2){
+        diff_count++;
+    }
 
     return diff_count == 1;
 }
@@ -63,16 +64,17 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
         vector<string> path = q.front();
         q.pop();
         string current_word = path.back();
-        
+
         for (const string& word :word_list){
-            if(visited.find(word) == visited.end() && is_adjacent(current_word, word)){
-                visited.insert(word);
-                vector<string> new_path = path;
-                new_path.push_back(word);
-                if(current_word == end_word){
-                    return path;
+            if(is_adjacent(current_word, word)){
+                if(visited.find(word) == visited.end()) {
+                    visited.insert(word);
+                    vector<string> new_path = path;
+                    new_path.push_back(word);
+                    if (word == end_word)
+                        return new_path;
+                    q.push(new_path);
                 }
-                q.push(new_path);
             }
         }
     }
@@ -100,6 +102,7 @@ void print_word_ladder(const vector<string>& ladder){
         cout << "No word ladder found." << endl;
     }
 }
+
 
 void verify_word_ladder(){
     set<string> word_list;
