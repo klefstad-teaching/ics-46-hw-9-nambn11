@@ -1,5 +1,4 @@
 #include "ladder.h"
-#include <algorithm>
 #define my_assert(e) {cout << #e << ((e) ? " passed": " failed") << endl;}
 
 using namespace std;
@@ -14,10 +13,13 @@ bool edit_distance_within(const std::string& str1, const std::string& str2, int 
     int len1 = str1.size();
     int len2 = str2.size();
 
-    if (abs(len1 - len2) > 1) return false; 
+    if (abs(len1 - len2) > 1){ 
+        return false; 
+    }
 
     int diff_count = 0;
-    int i = 0, j = 0;
+    int i = 0; 
+    int j = 0;
 
     while (i < len1 && j < len2) {
         if (str1[i] != str2[j]) {
@@ -47,32 +49,34 @@ bool is_adjacent(const std::string& word1, const std::string& word2) {
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list){
     if (begin_word == end_word) {
-        return {begin_word}; 
+        vector<string> empty;
+        return empty;
     }
+
     queue<vector<string>> q;
     set<string> visited;
-
     q.push({begin_word});
     visited.insert(begin_word);
+
     while(!q.empty()){
         vector<string> path = q.front();
         q.pop();
         string current_word = path.back();
-
-        if(current_word == end_word){
-            return path;
-        }
         
         for (const string& word :word_list){
-            if(!visited.count(word) && is_adjacent(current_word, word)){
+            if(visited.find(word) == visited.end() && is_adjacent(current_word, word)){
                 visited.insert(word);
                 vector<string> new_path = path;
                 new_path.push_back(word);
+                if(current_word == end_word){
+                    return path;
+                }
                 q.push(new_path);
             }
         }
     }
-    return {};
+    vector<string> empty;
+    return empty;
 }
 
 void load_words(set<string>& word_list, const string& file_name){
@@ -97,24 +101,24 @@ void print_word_ladder(const vector<string>& ladder){
 }
 
 void verify_word_ladder(){
-    // set<string> word_list;
-    // load_words(word_list, "words.txt");
+    set<string> word_list;
+    load_words(word_list, "words.txt");
 
 
-    // my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
+    my_assert(generate_word_ladder("cat", "dog", word_list).size() == 4);
 
 
-    // my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
+    my_assert(generate_word_ladder("marty", "curls", word_list).size() == 6);
 
 
-    // my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
+    my_assert(generate_word_ladder("code", "data", word_list).size() == 6);
 
 
-    // my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
+    my_assert(generate_word_ladder("work", "play", word_list).size() == 6);
 
 
-    // my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
+    my_assert(generate_word_ladder("sleep", "awake", word_list).size() == 8);
 
 
-    // my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
+    my_assert(generate_word_ladder("car", "cheat", word_list).size() == 4);
 }
